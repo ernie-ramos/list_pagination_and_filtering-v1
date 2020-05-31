@@ -32,15 +32,28 @@ const numItems = 10;
  *              the end index variable.
  */
 function showPage(list, page) {
-  const startIndex = (page * numItems) - numItems;
-  const endIndex = page * numItems;
+  const pag = parseInt(page);
+  const startIndex = (pag * numItems) - numItems;
+  const endIndex = (pag * numItems);
 
-  for (var i = 0; i < list.length; i++) {
-    const li = list[i];
-    const ul = li.parentNode;
-    ul.removeChild(li)
-
+  const listItem = document.querySelectorAll('.student-list li');
+  if (listItem.length > numItems) {
+    for (var i = 0; i < listItem.length; i++) {
+      const li = listItem[i];
+      const ul = li.parentNode;
+      ul.removeChild(li)
+    }
+  } else if (listItem.length == numItems) {
+    for (var i = 0; i < listItem.length; i++) {
+      const li = listItem[i];
+      const ul = li.parentNode;
+      ul.removeChild(li)
+    }
+  }
+  for (var i = 0; i <= endIndex; i++) {
     if (i >= startIndex && i < endIndex) {
+      const li = list[i];
+      const ul = document.querySelector('.student-list');
       ul.appendChild(li);
     }
   }
@@ -69,8 +82,8 @@ function appendPageLinks(list) {
   const pageDiv = document.querySelector('.page')
   const pagesNeeded = Math.ceil(list.length / numItems);
 
-  /* credit for this beautiful code: Robert Manolis - Student Success Specialist, Treehouse
-   * Helper funcs */
+
+   /* Helper funcs */ /* credit for this beautiful code: Robert Manolis - Student Success Specialist, Treehouse */
   const createEl = el => document.createElement(el);
   const createAndAppendEl = (parent, child) => {
     const chil = document.createElement(child);
@@ -89,6 +102,8 @@ function appendPageLinks(list) {
     const appendToUl = createAndAppendEl(appendToDiv, 'li');
     const appendToLi = createAndAppendEl(appendToUl, 'a');
 
+// end creation of DOM elements
+
     const aSelector = paginationDiv.querySelectorAll('a');
     aSelector[i].href = "#";
     const aActive = paginationDiv.querySelector('a');
@@ -101,8 +116,7 @@ function appendPageLinks(list) {
       }
       e.target.className = "active";
       const page = e.target.textContent;
-      console.log(list);
-      showPage(list, pages);
+      showPage(list, page);
     });
 
 
