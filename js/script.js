@@ -5,9 +5,9 @@ FSJS project 2 - List Filter and Pagination
 
 /**
  * @const {DOM elemebt} listItem - Stores the student list_item elements in the
- *                               student list.
+ *                                 student list.
  * @const {num} numItems - Stores the number of items to show on each “page”,
- *                       which is 10.
+ *                         which is 10.
  */
 const listItem = document.querySelectorAll('li');
 const numItems = 10;
@@ -22,9 +22,9 @@ const numItems = 10;
  * @par {num} page - The page parameter represents the page number that you’ll
  *                   pass in as an argument later when you call this function.
  * @const {num} startIndex - The start index of the list items to be displayed on
- *                         the given page.
+ *                           the given page.
  * @const {num} endIndex - The end index of the list items to be displayed on
- *                       the given page.
+ *                         the given page.
  * @const {DOM element} li - <li> elements that have been filtered by index.
  * @const {DOM element} ul - Parent of li for hiding all and showing desired items.
  * @if {i} li - Using the index, display any list item with an index that is
@@ -32,34 +32,28 @@ const numItems = 10;
  *              the end index variable.
  */
 function showPage(list, page) {
-  const pag = parseInt(page);
-  const startIndex = (pag * numItems) - numItems;
-  const endIndex = (pag * numItems);
-
-  const listItem = document.querySelectorAll('.student-list li');
-  if (listItem.length > numItems) {
-    for (var i = 0; i < listItem.length; i++) {
-      const li = listItem[i];
-      const ul = li.parentNode;
-      ul.removeChild(li)
-    }
-  } else if (listItem.length == numItems) {
-    for (var i = 0; i < listItem.length; i++) {
-      const li = listItem[i];
-      const ul = li.parentNode;
-      ul.removeChild(li)
-    }
+  const startIndex = (page * numItems) - numItems;
+  let endIndex = page * numItems;
+  if (endIndex > list.length) {
+    endIndex = list.length;
   }
-  for (var i = 0; i <= endIndex; i++) {
+  const liOnCurrentPage = document.querySelectorAll('.student-list li');
+  const ul = document.querySelector('.student-list');
+
+  // erases all items from current page
+  for (var i = 0; i < liOnCurrentPage.length; i++) {
+    const li = liOnCurrentPage[i];
+    ul.removeChild(li)
+  }
+
+  // appends new items
+  for (var i = 0; i < endIndex; i++) {
     if (i >= startIndex && i < endIndex) {
       const li = list[i];
-      const ul = document.querySelector('.student-list');
       ul.appendChild(li);
     }
   }
 };
-
-
 
 /**
  * The appendPageLinks function generates, appends, and adds
@@ -81,18 +75,14 @@ function showPage(list, page) {
 function appendPageLinks(list) {
   const pageDiv = document.querySelector('.page')
   const pagesNeeded = Math.ceil(list.length / numItems);
-
-
-   /* Helper funcs */ /* credit for this beautiful code: Robert Manolis - Student Success Specialist, Treehouse */
+  /* credit for this beautiful code: Robert Manolis - Student Success Specialist, Treehouse */
   const createEl = el => document.createElement(el);
   const createAndAppendEl = (parent, child) => {
     const chil = document.createElement(child);
     parent.appendChild(chil);
     return chil
   }
-
   const appendToPage = createAndAppendEl(pageDiv, 'div');
-
   const divsInMainDiv = pageDiv.querySelectorAll('div');
   const paginationDiv = divsInMainDiv[divsInMainDiv.length - 1];
   paginationDiv.className = "pagination";
@@ -101,8 +91,6 @@ function appendPageLinks(list) {
   for (var i = 0; i < pagesNeeded; i++) {
     const appendToUl = createAndAppendEl(appendToDiv, 'li');
     const appendToLi = createAndAppendEl(appendToUl, 'a');
-
-// end creation of DOM elements
 
     const aSelector = paginationDiv.querySelectorAll('a');
     aSelector[i].href = "#";
@@ -115,17 +103,23 @@ function appendPageLinks(list) {
         aSelector[i].className = "";
       }
       e.target.className = "active";
-      const page = e.target.textContent;
+      const page = parseInt(e.target.textContent);
       showPage(list, page);
     });
-
-
   }
-
 }
 showPage(listItem, 1);
 appendPageLinks(listItem);
 
+/*
+create a form and a button
 
+as the form is being typed into (at keyUp event) search
+the entire listItem for the content of the form
 
-// Remember to delete the comments that came with this file, and replace them with your own code comments.
+when the button is pressed search listItem for then
+content of the form
+
+if there's no result say No Results Found
+
+*/
