@@ -12,6 +12,32 @@ FSJS project 2 - List Filter and Pagination
 const listItem = document.querySelectorAll('li');
 const numItems = 10;
 
+const createEl = el => document.createElement(el);
+const createAndAppendEl = (parent, child) => {
+  const chil = document.createElement(child);
+  parent.appendChild(chil);
+  return chil
+}
+
+const clearPage = () => {
+  const ul = document.querySelector('.student-list');
+  const liOnCurrentPage = document.querySelectorAll('.student-list li');
+  // erases all items from current page
+  for (var i = 0; i < liOnCurrentPage.length; i++) {
+    const li = liOnCurrentPage[i];
+    ul.removeChild(li)
+  }
+};
+const appendToPage = (list, startIndex, endIndex) => {
+  // appends new items
+  const ul = document.querySelector('.student-list');
+  for (var i = 0; i < endIndex; i++) {
+    if (i >= startIndex && i < endIndex) {
+      const li = list[i];
+      ul.appendChild(li);
+    }
+  }
+};
 /**
  * The showPage function hides all of the items in the list except for the ten
  * you want to show.
@@ -37,22 +63,12 @@ function showPage(list, page) {
   if (endIndex > list.length) {
     endIndex = list.length;
   }
-  const liOnCurrentPage = document.querySelectorAll('.student-list li');
+
   const ul = document.querySelector('.student-list');
 
-  // erases all items from current page
-  for (var i = 0; i < liOnCurrentPage.length; i++) {
-    const li = liOnCurrentPage[i];
-    ul.removeChild(li)
-  }
+  clearPage();
+  appendToPage(list, startIndex, endIndex);
 
-  // appends new items
-  for (var i = 0; i < endIndex; i++) {
-    if (i >= startIndex && i < endIndex) {
-      const li = list[i];
-      ul.appendChild(li);
-    }
-  }
 };
 
 /**
@@ -76,12 +92,7 @@ function appendPageLinks(list) {
   const pageDiv = document.querySelector('.page')
   const pagesNeeded = Math.ceil(list.length / numItems);
   /* credit for this beautiful code: Robert Manolis - Student Success Specialist, Treehouse */
-  const createEl = el => document.createElement(el);
-  const createAndAppendEl = (parent, child) => {
-    const chil = document.createElement(child);
-    parent.appendChild(chil);
-    return chil
-  }
+
   const appendToPage = createAndAppendEl(pageDiv, 'div');
   const divsInMainDiv = pageDiv.querySelectorAll('div');
   const paginationDiv = divsInMainDiv[divsInMainDiv.length - 1];
@@ -108,8 +119,7 @@ function appendPageLinks(list) {
     });
   }
 }
-showPage(listItem, 1);
-appendPageLinks(listItem);
+
 
 /*
 create a form and a button
@@ -122,4 +132,50 @@ content of the form
 
 if there's no result say No Results Found
 
+<div class="student-search">
+  <input placeholder="Search for students...">
+  <button>Search</button>
+</div>
+
 */
+
+const searchComponent = (list) => {
+  showPage(list, 1);
+  appendPageLinks(list);
+
+  const pageHeader = document.querySelector('.page-header');
+  const searchCompsDiv = createAndAppendEl(pageHeader, 'div');
+  searchCompsDiv.className = "student-search";
+  const searchCompsInput = createAndAppendEl(searchCompsDiv, 'input');
+  searchCompsInput.placeholder = "Search by name...";
+  // const searchCompsButton = createAndAppendEl(searchCompsDiv, 'button');
+  // searchCompsButton.textContent = "Search";
+
+  searchCompsInput.addEventListener('keyup', (e) => {
+    clearPage();
+    const ul = document.querySelector('.student-list');
+    for (var i = 0; i < list.length; i++) {
+      const studentName = list[i].querySelector('.student-details h3').innerText;
+      const searchInput = searchCompsInput.value;
+      if (studentName.includes(searchInput)) {
+        if (document.querySelector('.student-list p')) {
+          ul.removeChild(document.querySelector('.student-list p'));
+        }
+        ul.appendChild(list[i]);
+      }
+    }
+  })
+  searchCompsInput.addEventListener('keyup', (e) => {
+    const ul = document.querySelector('.student-list');
+    const li = ul.querySelectorAll('.student-item');
+    const message = document.querySelectorAll('.student-list p');
+    if (li.length == 0 && message.length == 0) {
+      const p = createEl('p');
+      p.innerText = "Uh-oh! Try another name!";
+      ul.appendChild(p);
+    }
+  })
+
+};
+
+searchComponent(listItem);
