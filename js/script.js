@@ -12,6 +12,7 @@ FSJS project 2 - List Filter and Pagination
 const listItem = document.querySelectorAll('li');
 const numItems = 10;
 
+/* credit for this beautiful code: Robert Manolis - Student Success Specialist, Treehouse */
 const createEl = el => document.createElement(el);
 const createAndAppendEl = (parent, child) => {
   const chil = document.createElement(child);
@@ -91,7 +92,7 @@ function showPage(list, page) {
 function appendPageLinks(list) {
   const pageDiv = document.querySelector('.page')
   const pagesNeeded = Math.ceil(list.length / numItems);
-  /* credit for this beautiful code: Robert Manolis - Student Success Specialist, Treehouse */
+
 
   const appendToPage = createAndAppendEl(pageDiv, 'div');
   const divsInMainDiv = pageDiv.querySelectorAll('div');
@@ -142,7 +143,7 @@ if there's no result say No Results Found
 const searchComponent = (list) => {
   showPage(list, 1);
   appendPageLinks(list);
-
+  const pagesNeeded = Math.ceil(list.length / numItems);
   const pageHeader = document.querySelector('.page-header');
   const searchCompsDiv = createAndAppendEl(pageHeader, 'div');
   searchCompsDiv.className = "student-search";
@@ -161,21 +162,23 @@ const searchComponent = (list) => {
         if (document.querySelector('.student-list p')) {
           ul.removeChild(document.querySelector('.student-list p'));
         }
-        ul.appendChild(list[i]);
+        showPage(list, pagesNeeded);
       }
     }
   })
   searchCompsInput.addEventListener('keyup', (e) => {
     const ul = document.querySelector('.student-list');
     const li = ul.querySelectorAll('.student-item');
+    const pageDiv = document.querySelector('.page');
+    const paginationButtons = document.querySelector('.pagination');
     const message = document.querySelectorAll('.student-list p');
     if (li.length == 0 && message.length == 0) {
       const p = createEl('p');
       p.innerText = "Uh-oh! Try another name!";
       ul.appendChild(p);
+      // pageDiv.removeChild(paginationButtons);
     }
   })
-
 };
 
 searchComponent(listItem);
