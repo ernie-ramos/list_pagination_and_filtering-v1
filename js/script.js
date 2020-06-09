@@ -4,7 +4,6 @@ const itemsPerPage = 10;
 const removeExtraPagination = () => {
   const pagin = document.querySelectorAll('.pagination');
   if (pagin.length > 1) {
-    console.log("removing");
     for (var i = 1; i < pagin.length; i++) {
       const parent = document.querySelector('.page');
       parent.removeChild(pagin[i]);
@@ -63,51 +62,17 @@ const message = () => {
   }
 }
 
-const showPage = (list, page) => {
-  clear();
-  // **************************** START SEARCH CODE ****************************
-  // When the "Search" button is clicked, the list is filtered by
-  // student name for those that include the search value.
-  const button = document.querySelector('.student-search button');
-  button.addEventListener('click', (e) => {
-    clear();
-    for (var i = 0; i < listItems.length; i++) {
-      const nameSearched = listItems[i]
-      const anyStudentsName = nameSearched.querySelector('.student-details h3').innerText;
-      const searchInput = document.querySelector('.student-search input').value;
-      if (anyStudentsName.includes(searchInput)) {
-        const studentListUL = document.querySelector('.student-list');
-        studentListUL.appendChild(nameSearched);
-      }
-    }
-    message();
-    // pagination links based on how many search results are returned
-    // remove pagination to add paginated search results
-    const studentItemsExist = document.querySelector('.student-item');
-    if (studentItemsExist) {
-      const parent = document.querySelector('.page');
-      const child = document.querySelector('.pagination');
-      parent.removeChild(child);
-    }
-    // paginated search results
-    const newList = [];
-    const allChildren = document.querySelectorAll('.student-item');
-    for (var i = 0; i < allChildren.length; i++) {
-      newList.push(allChildren[i]);
-    }
-    if (e.key == "Backspace" && input.value == "") {
-      clear()
-      showPage(listItems, 1);
-
-    }
-    showPage(newList, 1);
-    appendPageLinks(newList);
-    removeExtraPagination();
+const onCut = () => {
+  const inputField = document.querySelector('.student-search input');
+  inputField.addEventListener('cut', (e) => {
+    clear()
+    showPage(listItems, 1);
   })
-  // keyup event listener to the search input so that the list filters
-  // in real time as the user types.
-  const input = document.querySelector('.student-search input');
-  input.addEventListener('keyup', (e) => {
+}
+
+const dynamicSearch = (searchType, searchEvent, searchParent) => {
+  searchType = document.querySelector(searchParent);
+  searchType.addEventListener(searchEvent, (e) => {
     clear();
     for (var i = 0; i < listItems.length; i++) {
       const nameSearched = listItems[i]
@@ -119,7 +84,6 @@ const showPage = (list, page) => {
         // add pagination here
       }
     }
-    message();
     // pagination links based on how many search results are returned
     // remove pagination to add paginated search results
     const studentItemsExist = document.querySelector('.student-item');
@@ -134,16 +98,25 @@ const showPage = (list, page) => {
     for (var i = 0; i < allChildren.length; i++) {
       newList.push(allChildren[i]);
     }
-    if (e.key == "Backspace" && input.value == "") {
+    if (e.key == "Backspace" && searchType.value == "") {
       clear()
       showPage(listItems, 1);
-
     }
+
     showPage(newList, 1);
     appendPageLinks(newList);
     removeExtraPagination();
   })
-  // **************************** END SEARCH CODE ****************************
+}
+
+const showPage = (list, page) => {
+  clear();
+  // When the "Search" button is clicked, the list is filtered by
+  // student name for those that include the search value.
+  dynamicSearch('button', 'click', '.student-search button');
+  // keyup event listener to the search input so that the list filters
+  // in real time as the user types.
+  dynamicSearch('input', 'keyup', '.student-search input');
   /*
   Loop over items in the list parameter
   -- If the index of a list item is >= the index of the first
@@ -162,6 +135,7 @@ const showPage = (list, page) => {
       parent.appendChild(list[i])
     }
   }
+  message();
   removeExtraPagination();
 };
 
@@ -191,7 +165,9 @@ const appendPageLinks = (list) => {
     li.appendChild(a);
   }
   const a = document.querySelectorAll('.pagination ul li a');
-  a[0].className = 'active';
+  if (a.length > 0) {
+    a[0].className = 'active';
+  }
 
   // Add an event listener to each a tag. When they are clicked
   // call the showPage function to display the appropriate page
@@ -212,5 +188,6 @@ const appendPageLinks = (list) => {
   }
 };
 search();
+onCut();
 showPage(listItems, 1);
 appendPageLinks(listItems);
