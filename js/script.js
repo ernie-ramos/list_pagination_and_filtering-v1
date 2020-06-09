@@ -100,6 +100,7 @@ const showPage = (list, page) => {
       showPage(listItems, 1);
 
     }
+    showPage(newList, 1);
     appendPageLinks(newList);
     removeExtraPagination();
   })
@@ -115,6 +116,7 @@ const showPage = (list, page) => {
       if (anyStudentsName.includes(searchInput)) {
         const studentListUL = document.querySelector('.student-list');
         studentListUL.appendChild(nameSearched);
+        // add pagination here
       }
     }
     message();
@@ -137,6 +139,7 @@ const showPage = (list, page) => {
       showPage(listItems, 1);
 
     }
+    showPage(newList, 1);
     appendPageLinks(newList);
     removeExtraPagination();
   })
