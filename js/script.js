@@ -1,6 +1,7 @@
 const listItems = document.querySelectorAll('.student-item');
 const itemsPerPage = 10;
 
+// ensures only one set of page buttons ever appear on screen
 const removeExtraPagination = () => {
   const pagin = document.querySelectorAll('.pagination');
   if (pagin.length > 1) {
@@ -11,6 +12,7 @@ const removeExtraPagination = () => {
   }
 }
 
+// clears the page entirely
 const clear = () => {
   removeExtraPagination();
   const warnPar = document.querySelector('.student-list')
@@ -32,8 +34,8 @@ const clear = () => {
   }
 };
 
+// Dynamically create and append a search bar.
 const search = () => {
-  // Dynamically create and append a search bar.
   const searchDiv = document.createElement('div');
   const parent = document.querySelector('.page-header');
   searchDiv.className = 'student-search';
@@ -46,14 +48,14 @@ const search = () => {
   searchDiv.appendChild(button);
 };
 
+// If no matches are found by the search, include a message in the
+// HTML to tell the user there are no matches.
 const message = () => {
-  // If no matches are found by the search, include a message in the
-  // HTML to tell the user there are no matches.
   const studentItemsExist = document.querySelector('.student-item');
   if (!studentItemsExist) {
     const ul = document.querySelector('.student-list');
     const p = document.createElement('p')
-    p.textContent = "No results. Try again!";
+    p.textContent = "Oh no!. Try a different name.";
     ul.appendChild(p);
 
     const parent = document.querySelector('.page');
@@ -62,6 +64,8 @@ const message = () => {
   }
 }
 
+// When user cuts text from input field this func resets the page
+// cutting neither triggers 'keyup' nor 'click' events.
 const onCut = () => {
   const inputField = document.querySelector('.student-search input');
   inputField.addEventListener('cut', (e) => {
@@ -81,10 +85,9 @@ const dynamicSearch = (searchType, searchEvent, searchParent) => {
       if (anyStudentsName.includes(searchInput)) {
         const studentListUL = document.querySelector('.student-list');
         studentListUL.appendChild(nameSearched);
-        // add pagination here
       }
     }
-    // pagination links based on how many search results are returned
+  // pagination links based on how many search results are returned
     // remove pagination to add paginated search results
     const studentItemsExist = document.querySelector('.student-item');
     if (studentItemsExist) {
@@ -117,6 +120,7 @@ const showPage = (list, page) => {
   // keyup event listener to the search input so that the list filters
   // in real time as the user types.
   dynamicSearch('input', 'keyup', '.student-search input');
+
   /*
   Loop over items in the list parameter
   -- If the index of a list item is >= the index of the first
@@ -139,6 +143,7 @@ const showPage = (list, page) => {
   removeExtraPagination();
 };
 
+// adds pagination buttons to bottom of page
 const appendPageLinks = (list) => {
   removeExtraPagination();
   // Determine how many pages are needed for the list by dividing the
