@@ -55,7 +55,7 @@ const message = () => {
   if (!studentItemsExist) {
     const ul = document.querySelector('.student-list');
     const p = document.createElement('p')
-    p.textContent = "Oh no!. Try a different name.";
+    p.textContent = "Oh no! Try a different name.";
     ul.appendChild(p);
 
     const parent = document.querySelector('.page');
@@ -74,6 +74,8 @@ const onCut = () => {
   })
 }
 
+// When the "Search" button is clicked, or 'keyup' triggers, the list is
+// filtered by student name for those that include the search value.
 const dynamicSearch = (searchType, searchEvent, searchParent) => {
   searchType = document.querySelector(searchParent);
   searchType.addEventListener(searchEvent, (e) => {
@@ -114,13 +116,6 @@ const dynamicSearch = (searchType, searchEvent, searchParent) => {
 
 const showPage = (list, page) => {
   clear();
-  // When the "Search" button is clicked, the list is filtered by
-  // student name for those that include the search value.
-  dynamicSearch('button', 'click', '.student-search button');
-  // keyup event listener to the search input so that the list filters
-  // in real time as the user types.
-  dynamicSearch('input', 'keyup', '.student-search input');
-
   /*
   Loop over items in the list parameter
   -- If the index of a list item is >= the index of the first
@@ -196,3 +191,7 @@ search();
 onCut();
 showPage(listItems, 1);
 appendPageLinks(listItems);
+
+
+dynamicSearch('button', 'click', '.student-search button');
+dynamicSearch('input', 'keyup', '.student-search input');
