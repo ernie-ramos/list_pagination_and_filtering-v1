@@ -1,11 +1,25 @@
+/******************************************
+Treehouse FSJS Techdegree:
+Project 2 - List Pagination and Filtering
+BY: ERNESTO RAMOS
+6/11/2020
+ERNRAMOS1991@GMAIL.COM
+******************************************
+@PLEASE @REJECT @IF @NOT @EXCEEDS @EXPECTATIONS
+******************************************/
+
+/***
+ * Refer to README for more info about this project.
+***/
+
 const listItems = document.querySelectorAll('.student-item');
 const itemsPerPage = 10;
 
-// ensures only one set of page buttons ever appear on screen
+// Ensures only one set of page buttons ever appear on screen.
 const removeExtraPagination = () => {
   const pagin = document.querySelectorAll('.pagination');
   if (pagin.length > 1) {
-    for (var i = 1; i < pagin.length; i++) {
+    for (let i = 1; i < pagin.length; i++) {
       const parent = document.querySelector('.page');
       parent.removeChild(pagin[i]);
     }
@@ -21,7 +35,7 @@ const clear = () => {
     warnPar.removeChild(warning);
   }
   const allChildren = document.querySelectorAll('.student-item');
-  for (var i = 0; i < allChildren.length; i++) {
+  for (let i = 0; i < allChildren.length; i++) {
     const child = document.querySelector('.student-item');
     const parent = child.parentNode;
     parent.removeChild(child);
@@ -80,7 +94,7 @@ const dynamicSearch = (searchType, searchEvent, searchParent) => {
   searchType = document.querySelector(searchParent);
   searchType.addEventListener(searchEvent, (e) => {
     clear();
-    for (var i = 0; i < listItems.length; i++) {
+    for (let i = 0; i < listItems.length; i++) {
       const nameSearched = listItems[i]
       const anyStudentsName = nameSearched.querySelector('.student-details h3').innerText;
       const searchInput = document.querySelector('.student-search input').value;
@@ -100,7 +114,7 @@ const dynamicSearch = (searchType, searchEvent, searchParent) => {
     // paginated search results
     const newList = [];
     const allChildren = document.querySelectorAll('.student-item');
-    for (var i = 0; i < allChildren.length; i++) {
+    for (let i = 0; i < allChildren.length; i++) {
       newList.push(allChildren[i]);
     }
     if (e.key == "Backspace" && searchType.value == "") {
@@ -123,7 +137,7 @@ const showPage = (list, page) => {
   -- && the list item index is <= the index of the last item
   that should be shown on the page, show it
   */
-  for (var i = 0; i < list.length; i++) {
+  for (let i = 0; i < list.length; i++) {
     const startIndex = (page * itemsPerPage) - itemsPerPage;
     let endIndex = page * itemsPerPage;
     if (endIndex > list.length) {
@@ -156,7 +170,7 @@ const appendPageLinks = (list) => {
   div.appendChild(ul);
 
   // for every page, add li and a tags with the page number text
-  for (var i = 0; i < pagesNeeded; i++) {
+  for (let i = 0; i < pagesNeeded; i++) {
     const li = document.createElement('li');
     const a = document.createElement('a');
     a.href = '#';
@@ -171,10 +185,10 @@ const appendPageLinks = (list) => {
 
   // Add an event listener to each a tag. When they are clicked
   // call the showPage function to display the appropriate page
-  for (var i = 0; i < a.length; i++) {
+  for (let i = 0; i < a.length; i++) {
     a[i].addEventListener('click', (e) => {
       // Loop over pagination links to remove active class from all links
-      for (var i = 0; i < a.length; i++) {
+      for (let i = 0; i < a.length; i++) {
         a[i].className = "";
       }
       // Add the active class to the link that was just clicked.

@@ -1,43 +1,25 @@
-#Unit 2 Project: List Pagination and Filtering
+/******************************************
+Treehouse FSJS Techdegree:
+Project 2 - List Pagination and Filtering
+BY: ERNESTO RAMOS
+6/11/2020
+ERNRAMOS1991@GMAIL.COM
+******************************************
+@PLEASE @REJECT @IF @NOT @EXCEEDS @EXPECTATIONS
+******************************************/
 
-#ReadMe to-do:
--A description of the project in your own words
--The skills, techniques and process used to complete the project
--If you’ve attempted to earn an “Exceeds Expectations” grade, list the “Extra Credit” features you added.
+#List pagination project-
+- Designed to display 10 items per page and provide navigation to jump to a list of more items. There is also a dynamic search bar which filters and paginates results in real-time.
 
-# PROGRESSIVE ENHANCEMENT
+#Program Flow-
+- search(); creates the HTML for the search bar and button
+- onCut(); captures edge cases where users use cut to erase contents in the search bar. Since cut does not trigger keyup or click, it is necessary.
+- showPage(listItems, 1); this is the "default" state of the app. Dividing the list of items in the HTML into pages with 10 items, displaying page 1 by default.
+- appendPageLinks(listItems); creates the page links and the addEventListeners that make clicking on the links possible.
 
-#Core Principles
-The progressive enhancement strategy consists of the following core principles:
+This covers the basic functionality of the app.
 
-Basic content should be accessible to all web browsers
-Basic functionality should be accessible to all web browsers
-Sparse, semantic markup contains all content
-Enhanced layout is provided by externally linked CSS
-Enhanced behavior is provided by unobtrusive, externally linked JavaScript
-End-user web browser preferences are respected
+- dynamicSearch(searchType, searchEvent, searchParent); was written with the purpose of listening for an event (ideally keyup or click) and generating a list containing the items that match the search query. This search result is then passed to showPage and appendPageLinks as if the program was running for the first time.
 
-
-#Pseudo for Progressive Enhancement
-if('querySelector' in document
-  && 'localStorage' in window
-  && 'addEventListener' in window) {
-  // bootstrap the javascript application
-}
-
-#avoid disabling zoom
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-#use feature detection to ensure that you’re implementing with progressive enhancement in mind
-if ('serviceWorker' in navigator) {
-  // check to see if service worker API exists
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/sw.js').then(function(registration) {
-      // registration was successful
-      console.log('ServiceWorker registration successful with scope: ', registration.scope);
-    }).catch(function(err) {
-      // registration failed :(
-      console.log('ServiceWorker registration failed: ', err);
-    });
-  });
-}
+#Room for improvements
+- It bothers me that I need removeExtraPagination(), I feel like I should be able to extrapolate the pagination (separating the HTML creation part of appendPageLinks from the addEventListener part) and the link clicking so new buttons aren't appended every time the function is called. However, diving this deep into optimizing this code is beyond the scope of my current skillset and I have indulged myself with far too much time for this project.
